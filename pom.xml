@@ -37,6 +37,31 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+  <scm>
+    <connection>scm:git:ssh://git@github.com:openweb-nl/in-memory-jcr.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:openweb-nl/in-memory-jcr.git</developerConnection>
+    <url>https://github.com/openweb-nl/in-memory-jcr</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>openweb-maven-releases</id>
+      <url>https://maven.open-web.nl/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>openweb-maven-snapshots</id>
+      <url>https://maven.open-web.nl/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>openweb-maven-releases</id>
+      <url>https://maven.open-web.nl/content/repositories/public/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>javax.jcr</groupId>
@@ -88,5 +113,37 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>LICENSE</include>
+          <include>NOTICE</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
