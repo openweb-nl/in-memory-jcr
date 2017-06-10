@@ -3,6 +3,7 @@
   "jcr:uuid" : "cafebabe-cafe-babe-cafe-babecafebabe",
   "content" : {
     "jcr:primaryType" : "hippostd:folder",
+    "jcr:mixinTypes" : "mix:referenceable",
     "jcr:uuid" : "cafebabe-cafe-babe-cafe-babecafebab1",
     "documents" : {
       "jcr:primaryType" : "hippostd:folder",
@@ -33,6 +34,13 @@
     },
     "assets" : {
       "jcr:primaryType" : "hippogallery:stdAssetGallery"
-    }
+    },
+    "sameNameSiblings" : [ {
+      "jcr:primaryType" : "jmt:item",
+      "singleValueString" : "stringValue1"
+    }, {
+      "jcr:primaryType" : "jmt:item",
+      "singleValueString" : "stringValue2"
+    } ]
   }
 }

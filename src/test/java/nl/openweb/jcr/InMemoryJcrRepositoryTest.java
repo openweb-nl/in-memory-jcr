@@ -15,6 +15,7 @@ import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,19 +34,9 @@ public class InMemoryJcrRepositoryTest {
         inMemoryJcrRepository = new InMemoryJcrRepository();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("node.json")) {
             Importer importer = new Importer.Builder(() -> {
-                try {
-                    Session session = inMemoryJcrRepository.login(new SimpleCredentials("admin", "admin".toCharArray()));
-                    NodeTypeUtils.createNodeType(session, "hippostd:folder");
-                    NodeTypeUtils.createNodeType(session, "hippogallery:stdImageGallery");
-                    NodeTypeUtils.createNodeType(session, "hippogallery:stdAssetGallery");
-                    NodeTypeUtils.createMixin(session, "hippo:named");
-                    NodeTypeUtils.createMixin(session, "mix:referenceable");
-                    NodeTypeUtils.createMixin(session, "my:mixin");
-                    return session.getRootNode();
-                } catch (RepositoryException e) {
-                    throw new RuntimeException();
-                }
-            }).setAddMixins(true).setAddUuid(false).build();
+                Session session = inMemoryJcrRepository.login(new SimpleCredentials("admin", "admin".toCharArray()));
+                return session.getRootNode();
+            }).addMixins(true).addUuid(false).addUnknownTypes(true).build();
 
             rootNode = importer.createNodesFromJson(inputStream);
         }
@@ -80,7 +71,8 @@ public class InMemoryJcrRepositoryTest {
         for (NodeIterator nodes = content.getNodes(); nodes.hasNext(); ) {
             Node node = nodes.nextNode();
             MatcherAssert.assertThat("Path is not what we expect!", node.getPath(),
-                    Matchers.is(Matchers.oneOf("/content/documents", "/content/gallery", "/content/assets")));
+                    Matchers.is(Matchers.oneOf("/content/documents", "/content/gallery", "/content/assets",
+                            "/content/sameNameSiblings", "/content/sameNameSiblings[2]")));
         }
     }
 
@@ -137,11 +129,14 @@ public class InMemoryJcrRepositoryTest {
         }
         assertTrue(node.isNodeType("hippo:named"));
         assertNotNull(node.getMixinNodeTypes());
+
+        assertTrue(rootNode.getNode("content").isNodeType("mix:referenceable"));
     }
 
     @Test
     public void addMixinTest() throws RepositoryException {
         Node node = rootNode.getNode("content/documents");
+        NodeTypeUtils.createMixin(rootNode.getSession(), "my:mixin");
         node.addMixin("my:mixin");
         assertTrue(node.isNodeType("my:mixin"));
     }
@@ -171,6 +166,16 @@ public class InMemoryJcrRepositoryTest {
         assertNotNull(subsubnode);
         assertEquals("/content/documents/subnode/subsubnode", subsubnode.getPath());
         assertTrue(subsubnode.isNodeType("nt:unstructured"));
+    }
+
+    @Test
+    public void sameNameSiblingsTest() throws RepositoryException {
+        Node sameNameSibling1 = rootNode.getNode("content/sameNameSiblings");
+        Assert.assertNotNull(sameNameSibling1);
+        propertyBasicValidationForSingleValue(sameNameSibling1, "singleValueString", PropertyType.STRING, "stringValue1", Value::getString);
+        Node sameNameSibling2 = rootNode.getNode("content/sameNameSiblings[1]");
+        Assert.assertNotNull(sameNameSibling2);
+        propertyBasicValidationForSingleValue(sameNameSibling2, "singleValueString", PropertyType.STRING, "stringValue1", Value::getString);
     }
 
     private void propertyBasicValidationForSingleValue(Node node, String propertyName, int propertyType, Object expectedValue, ExtractValue extractor) throws RepositoryException {

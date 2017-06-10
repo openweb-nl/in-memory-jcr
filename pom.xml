@@ -31,24 +31,26 @@
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
       <version>1.7.12</version>
     </dependency>
+
+    <!-- Test dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
+      <artifactId>slf4j-nop</artifactId>
       <version>1.7.12</version>
+      <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>nl.openweb.jcr</groupId>
       <artifactId>jcr-mocking-tool</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

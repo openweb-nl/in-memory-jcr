@@ -4,6 +4,7 @@ package nl.openweb.jcr;
 import javax.jcr.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 
@@ -17,9 +18,9 @@ public class InMemoryJcrRepository implements Repository {
     private final File repositoryFolder;
 
     public InMemoryJcrRepository() throws RepositoryException, URISyntaxException, IOException {
-        File configFile = new File(InMemoryJcrRepository.class.getClassLoader().getResource("configuration.xml").toURI());
+        InputStream configFile = InMemoryJcrRepository.class.getClassLoader().getResourceAsStream("configuration.xml");
         this.repositoryFolder = Files.createTempDirectory("repository-").toFile();
-        RepositoryConfig config = RepositoryConfig.create(configFile, this.repositoryFolder);
+        RepositoryConfig config = RepositoryConfig.create(configFile, this.repositoryFolder.getAbsolutePath());
         this.repository = RepositoryImpl.create(config);
     }
 
