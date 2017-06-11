@@ -97,7 +97,7 @@
     <dependency>
       <groupId>nl.openweb.jcr</groupId>
       <artifactId>jcr-mocking-tool</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
