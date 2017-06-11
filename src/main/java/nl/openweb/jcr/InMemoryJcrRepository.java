@@ -27,11 +27,15 @@ import java.nio.file.Files;
 import org.apache.commons.io.FileUtils;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class InMemoryJcrRepository implements Repository {
+public class InMemoryJcrRepository implements Repository, AutoCloseable {
 
     private final RepositoryImpl repository;
     private final File repositoryFolder;
+
+    private static final Logger LOG = LoggerFactory.getLogger(InMemoryJcrRepository.class);
 
     public InMemoryJcrRepository() throws RepositoryException, URISyntaxException, IOException {
         InputStream configFile = InMemoryJcrRepository.class.getClassLoader().getResourceAsStream("configuration.xml");
@@ -93,5 +97,14 @@ public class InMemoryJcrRepository implements Repository {
     @Override
     public Session login(String workspace) throws RepositoryException {
         return repository.login(workspace);
+    }
+
+    @Override
+    public void close() {
+        try {
+            shutdown();
+        } catch (IOException e) {
+            LOG.warn("Failed to removed temporary repository folder.", e);
+        }
     }
 }
