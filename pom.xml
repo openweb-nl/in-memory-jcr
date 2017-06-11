@@ -38,8 +38,8 @@
   </properties>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com:openweb-nl/in-memory-jcr.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:openweb-nl/in-memory-jcr.git</developerConnection>
+    <connection>scm:git:git@github.com:openweb-nl/in-memory-jcr.git</connection>
+    <developerConnection>scm:git:git@github.com:openweb-nl/in-memory-jcr.git</developerConnection>
     <url>https://github.com/openweb-nl/in-memory-jcr</url>
     <tag>HEAD</tag>
   </scm>
