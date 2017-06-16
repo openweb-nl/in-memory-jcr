@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.openweb.jcr.utils.NodeTypeUtils;
+import nl.openweb.jcr.utils.NodeTypeDefUtils;
 
 
 import static org.junit.Assert.*;
@@ -152,7 +152,7 @@ public class InMemoryJcrRepositoryTest {
     @Test
     public void addMixinTest() throws RepositoryException {
         Node node = rootNode.getNode("content/documents");
-        NodeTypeUtils.createMixin(rootNode.getSession(), "my:mixin");
+        NodeTypeDefUtils.createMixin(rootNode.getSession(), "my:mixin");
         node.addMixin("my:mixin");
         assertTrue(node.isNodeType("my:mixin"));
     }

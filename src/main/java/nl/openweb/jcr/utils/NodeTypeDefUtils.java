@@ -32,8 +32,8 @@ import org.apache.jackrabbit.spi.QPropertyDefinition;
 import org.apache.jackrabbit.spi.commons.QNodeTypeDefinitionImpl;
 import org.apache.jackrabbit.spi.commons.name.NameFactoryImpl;
 
-public class NodeTypeUtils {
-    private NodeTypeUtils() {
+public class NodeTypeDefUtils {
+    private NodeTypeDefUtils() {
         // ignore
     }
 
@@ -51,11 +51,27 @@ public class NodeTypeUtils {
         }
     }
 
+    public static String getOrRegisterNamespace(Session session, String name) throws RepositoryException {
+        String uri = null;
+        if (name.indexOf(':') > -1) {
+            String prefix = name.substring(0, name.indexOf(':'));
+            NamespaceRegistry namespaceRegistry = session.getWorkspace().getNamespaceRegistry();
+            try {
+                uri = namespaceRegistry.getURI(prefix);
+            } catch (RepositoryException e) {
+                uri = "https://www.openweb.nl/" + prefix + "/nt/1.0";
+                namespaceRegistry.registerNamespace(prefix, uri);
+            }
+        }
+        return uri;
+    }
+
+
     private static void registerNodeOrMixin(Session session, String nodeType, boolean isMixin) throws RepositoryException {
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         String uri = getOrRegisterNamespace(session, nodeType);
         NameFactory nameFactory = NameFactoryImpl.getInstance();
-        Name name = nameFactory.create(uri, nodeType.substring(nodeType.indexOf(":") + 1));
+        Name name = nameFactory.create(uri, nodeType.substring(nodeType.indexOf(':') + 1));
         ValueFactory valueFactory = session.getValueFactory();
         Name[] supertypes;
         if (!isMixin) {
@@ -69,16 +85,5 @@ public class NodeTypeUtils {
         nodeTypeManager.registerNodeType(nodeTypeDefinition, false);
     }
 
-    private static String getOrRegisterNamespace(Session session, String nodeName) throws RepositoryException {
-        String prefix = nodeName.substring(0, nodeName.indexOf(":"));
-        NamespaceRegistry namespaceRegistry = session.getWorkspace().getNamespaceRegistry();
-        String uri;
-        try {
-            uri = namespaceRegistry.getURI(prefix);
-        } catch (RepositoryException e) {
-            uri = "https://www.openweb.nl/" + prefix + "/nt/1.0";
-            namespaceRegistry.registerNamespace(prefix, uri);
-        }
-        return uri;
-    }
+
 }
