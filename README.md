@@ -1,4 +1,4 @@
-# In Memery JCR
+# In Memory JCR
 
 The goal of this project is to make it easier for developers to set up 
 a full feature JCR repository (In this case Jackrabbit) for testing purposes.
