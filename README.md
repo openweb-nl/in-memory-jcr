@@ -23,7 +23,7 @@ you can do so by adding the following snippet to your pom.xml file
   <dependency>
     <groupId>nl.openweb.jcr</groupId>
     <artifactId>in-memory-jcr</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -40,9 +40,10 @@ to obtain an instance of java session via
 Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 ```
 Please notice that you need to shutdown the repository at the end of your test. Because unlike
-what the name of this library might suggest the repository is not 100% in the memory, Still the 
-indexes are keep in a temporary folder. So shutting down the repository insures that the index
-files are deleted. To shutdown the repository you can use the following snippet
+what the name of this library might suggest the repository is not 100% in the memory. 
+The database and the indexes are indeed kept in memory, but it still places a couple of XML files in 
+a temporary folder. So shutting down the repository insures that these xml files are deleted. 
+To shutdown the repository you can use the following snippet
 
 ```java
 repository.shutdown();
