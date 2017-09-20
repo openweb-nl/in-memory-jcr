@@ -23,7 +23,7 @@ you can do so by adding the following snippet to your pom.xml file
   <dependency>
     <groupId>nl.openweb.jcr</groupId>
     <artifactId>in-memory-jcr</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>test</scope>
   </dependency>
   ...
