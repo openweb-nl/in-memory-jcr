@@ -40,14 +40,30 @@ public class NodeTypeDefUtils {
     public static void createNodeType(Session session, String nodeType) throws RepositoryException {
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         if (!nodeTypeManager.hasNodeType(nodeType)) {
-            registerNodeOrMixin(session, nodeType, false);
+            registerNodeOrMixin(session, nodeType, "nt:unstructured", false);
+        }
+    }
+
+    public static void createNodeType(Session session, String nodeType, String superType) throws RepositoryException {
+        NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
+        createNodeType(session, superType);
+        if (!nodeTypeManager.hasNodeType(nodeType)) {
+            registerNodeOrMixin(session, nodeType, superType, false);
         }
     }
 
     public static void createMixin(Session session, String mixinType) throws RepositoryException {
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         if (!nodeTypeManager.hasNodeType(mixinType)) {
-            registerNodeOrMixin(session, mixinType, true);
+            registerNodeOrMixin(session, mixinType, "nt:unstructured", true);
+        }
+    }
+
+    public static void createMixin(Session session, String mixinType, String superType) throws RepositoryException {
+        NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
+        createMixin(session, superType);
+        if (!nodeTypeManager.hasNodeType(mixinType)) {
+            registerNodeOrMixin(session, mixinType, superType, true);
         }
     }
 
@@ -67,22 +83,22 @@ public class NodeTypeDefUtils {
     }
 
 
-    private static void registerNodeOrMixin(Session session, String nodeType, boolean isMixin) throws RepositoryException {
+    private static void registerNodeOrMixin(Session session, String nodeType, String superType, boolean isMixin) throws RepositoryException {
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         String uri = getOrRegisterNamespace(session, nodeType);
         NameFactory nameFactory = NameFactoryImpl.getInstance();
-        Name name = nameFactory.create(uri, nodeType.substring(nodeType.indexOf(':') + 1));
+        Name name = nameFactory.create(uri, getLocalName(nodeType));
         ValueFactory valueFactory = session.getValueFactory();
         Name[] supertypes;
-        if (!isMixin) {
-            supertypes = new Name[]{nameFactory.create("http://www.jcp.org/jcr/nt/1.0", "unstructured")};
-        } else {
-            supertypes = new Name[0];
-        }
-
-        QNodeTypeDefinitionImpl ntd = new QNodeTypeDefinitionImpl(name, supertypes, new Name[0], isMixin, false, true, true, name, new QPropertyDefinition[0], new QNodeDefinition[0]);
+        String namespace = getOrRegisterNamespace(session, superType);
+        supertypes = new Name[]{nameFactory.create(namespace, getLocalName(superType))};
+        QNodeTypeDefinitionImpl ntd = new QNodeTypeDefinitionImpl(name, supertypes, new Name[0], isMixin, false, true, true, null, new QPropertyDefinition[0], new QNodeDefinition[0]);
         NodeTypeDefinition nodeTypeDefinition = new NodeTypeDefinitionImpl(ntd, (SessionImpl) session, valueFactory);
         nodeTypeManager.registerNodeType(nodeTypeDefinition, false);
+    }
+
+    private static String getLocalName(String nodeType) {
+        return nodeType.substring(nodeType.indexOf(':') + 1);
     }
 
 
