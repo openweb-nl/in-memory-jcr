@@ -10,20 +10,12 @@ The first is to add this library to your project as a test dependency. If you ar
 you can do so by adding the following snippet to your pom.xml file
 
 ```xml
-<repositories>
-  ..
-	<repository>
-	  <id>openweb-maven-public</id>
-	  <url>https://maven.open-web.nl/content/repositories/public/</url>
-	</repository>
-</repositories>
-...
 <dependencies>
   ...
   <dependency>
     <groupId>nl.openweb.jcr</groupId>
     <artifactId>in-memory-jcr</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.2</version>
     <scope>test</scope>
   </dependency>
   ...
