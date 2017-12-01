@@ -15,7 +15,8 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>nl.openweb.jcr</groupId>
@@ -29,6 +30,15 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <name>Ebrahim Aharpour</name>
+      <email>ebrahim@openweb.nl</email>
+      <organization>Open Web IT B.V.</organization>
+      <organizationUrl>https://www.openweb.nl/</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -52,13 +62,6 @@
       <url>https://maven.open-web.nl/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>openweb-maven-public</id>
-      <url>https://maven.open-web.nl/content/repositories/public/</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -90,12 +93,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
       <version>1.7.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>nl.openweb.jcr</groupId>
-      <artifactId>jcr-mocking-tool</artifactId>
-      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
