@@ -25,8 +25,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.hippoecm.repository.jackrabbit.RepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +37,11 @@ public class InMemoryJcrRepository implements Repository, AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryJcrRepository.class);
 
-    public InMemoryJcrRepository() throws RepositoryException, URISyntaxException, IOException {
+    public InMemoryJcrRepository() throws RepositoryException, IOException {
         InputStream configFile = InMemoryJcrRepository.class.getClassLoader().getResourceAsStream("configuration.xml");
         this.repositoryFolder = Files.createTempDirectory("repository-").toFile();
         RepositoryConfig config = RepositoryConfig.create(configFile, this.repositoryFolder.getAbsolutePath());
-        this.repository = RepositoryImpl.create(config);
+        this.repository = new HippoRepository(config);
     }
 
     public void shutdown() throws IOException {
@@ -50,7 +50,7 @@ public class InMemoryJcrRepository implements Repository, AutoCloseable {
     }
 
     @Override
-    public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException {
+    public Session login(Credentials credentials, String workspaceName) throws RepositoryException {
         return repository.login(credentials, workspaceName);
     }
 
