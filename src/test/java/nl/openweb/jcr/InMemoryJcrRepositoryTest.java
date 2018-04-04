@@ -20,6 +20,8 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
+import org.hippoecm.repository.api.HippoNode;
+import org.junit.Assert;
 import org.junit.Test;
 
 import nl.openweb.jcr.utils.NodeTypeDefUtils;
@@ -41,6 +43,19 @@ public class InMemoryJcrRepositoryTest {
             Node rootNode = session.getRootNode();
             NodeTypeDefUtils.createNodeType(session, NODE_TYPE);
             rootNode.addNode("mynode", NODE_TYPE);
+            session.save();
+        }
+
+    }
+
+    @Test
+    public void hippoNode() throws Exception {
+        try (InMemoryJcrRepository repository = new InMemoryJcrRepository()) {
+            Session session = repository.login(
+                    new SimpleCredentials("admin", "admin".toCharArray())
+            );
+            Node myNode = session.getRootNode().addNode("mynode");
+            Assert.assertTrue(myNode instanceof HippoNode);
             session.save();
         }
 

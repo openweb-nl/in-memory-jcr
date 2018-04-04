@@ -30,7 +30,9 @@ import org.apache.jackrabbit.spi.NameFactory;
 import org.apache.jackrabbit.spi.QNodeDefinition;
 import org.apache.jackrabbit.spi.QPropertyDefinition;
 import org.apache.jackrabbit.spi.commons.QNodeTypeDefinitionImpl;
+import org.apache.jackrabbit.spi.commons.conversion.NamePathResolver;
 import org.apache.jackrabbit.spi.commons.name.NameFactoryImpl;
+import org.hippoecm.repository.impl.SessionDecorator;
 
 public class NodeTypeDefUtils {
     private NodeTypeDefUtils() {
@@ -93,8 +95,21 @@ public class NodeTypeDefUtils {
         String namespace = getOrRegisterNamespace(session, superType);
         supertypes = new Name[]{nameFactory.create(namespace, getLocalName(superType))};
         QNodeTypeDefinitionImpl ntd = new QNodeTypeDefinitionImpl(name, supertypes, new Name[0], isMixin, false, true, true, null, new QPropertyDefinition[0], new QNodeDefinition[0]);
-        NodeTypeDefinition nodeTypeDefinition = new NodeTypeDefinitionImpl(ntd, (SessionImpl) session, valueFactory);
+        NamePathResolver resolver = getNamePathResolver(session);
+        NodeTypeDefinition nodeTypeDefinition = new NodeTypeDefinitionImpl(ntd, resolver, valueFactory);
         nodeTypeManager.registerNodeType(nodeTypeDefinition, false);
+    }
+
+    private static NamePathResolver getNamePathResolver(Session session) {
+        NamePathResolver resolver = null;
+        Session unwrapped = session;
+        if (session instanceof SessionDecorator) {
+            unwrapped = SessionDecorator.unwrap(session);
+        }
+        if (unwrapped instanceof NamePathResolver) {
+            resolver = (NamePathResolver) unwrapped;
+        }
+        return resolver;
     }
 
     private static String getLocalName(String nodeType) {

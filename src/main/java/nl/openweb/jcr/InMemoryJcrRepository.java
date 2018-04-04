@@ -17,22 +17,23 @@
 package nl.openweb.jcr;
 
 
-import javax.jcr.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.hippoecm.repository.impl.DecoratorFactoryImpl;
 import org.hippoecm.repository.jackrabbit.RepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+
 public class InMemoryJcrRepository implements Repository, AutoCloseable {
 
-    private final RepositoryImpl repository;
+    private final RepositoryImpl originalRepository;
+    private final Repository repository;
     private final File repositoryFolder;
 
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryJcrRepository.class);
@@ -41,11 +42,12 @@ public class InMemoryJcrRepository implements Repository, AutoCloseable {
         InputStream configFile = InMemoryJcrRepository.class.getClassLoader().getResourceAsStream("configuration.xml");
         this.repositoryFolder = Files.createTempDirectory("repository-").toFile();
         RepositoryConfig config = RepositoryConfig.create(configFile, this.repositoryFolder.getAbsolutePath());
-        this.repository = new HippoRepository(config);
+        this.originalRepository = new HippoRepository(config);
+        this.repository = new DecoratorFactoryImpl().getRepositoryDecorator(originalRepository);
     }
 
     public void shutdown() throws IOException {
-        repository.shutdown();
+        originalRepository.shutdown();
         FileUtils.deleteDirectory(repositoryFolder);
     }
 
