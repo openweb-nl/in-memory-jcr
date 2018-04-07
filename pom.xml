@@ -20,7 +20,7 @@
 
   <groupId>nl.openweb.jcr</groupId>
   <artifactId>in-memory-jcr</artifactId>
-  <version>hippo-1.3.3-SNAPSHOT</version>
+  <version>hippo-1.3.3</version>
 
   <name>In Memory JCR</name>
   <description>A in memory JCR repository for testing Purposes</description>
@@ -52,7 +52,7 @@
     <connection>scm:git:git@github.com:openweb-nl/in-memory-jcr.git</connection>
     <developerConnection>scm:git:git@github.com:openweb-nl/in-memory-jcr.git</developerConnection>
     <url>https://github.com/openweb-nl/in-memory-jcr</url>
-    <tag>hippo</tag>
+    <tag>in-memory-jcr-hippo-1.3.3</tag>
   </scm>
 
   <distributionManagement>
