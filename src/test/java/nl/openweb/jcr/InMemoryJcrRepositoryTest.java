@@ -16,6 +16,9 @@
 
 package nl.openweb.jcr;
 
+import nl.openweb.jcr.utils.NodeTypeDefUtils;
+import org.junit.jupiter.api.Test;
+
 import javax.jcr.*;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -23,13 +26,8 @@ import javax.jcr.query.QueryResult;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import nl.openweb.jcr.utils.NodeTypeDefUtils;
-
-
 import static javax.jcr.query.Query.XPATH;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Ebrahim Aharpour
@@ -44,7 +42,7 @@ public class InMemoryJcrRepositoryTest {
     public void creatingRepository() throws Exception {
         try (InMemoryJcrRepository repository = new InMemoryJcrRepository()) {
             Session session = repository.login(
-                    new SimpleCredentials("admin", "admin".toCharArray())
+                new SimpleCredentials("admin", "admin".toCharArray())
             );
             addSampleNode(session);
         }
@@ -54,7 +52,7 @@ public class InMemoryJcrRepositoryTest {
     public void search() throws IOException, RepositoryException, URISyntaxException {
         try (InMemoryJcrRepository repository = new InMemoryJcrRepository()) {
             Session session = repository.login(
-                    new SimpleCredentials("admin", "admin".toCharArray())
+                new SimpleCredentials("admin", "admin".toCharArray())
             );
             addSampleNode(session);
 
@@ -63,8 +61,8 @@ public class InMemoryJcrRepositoryTest {
             QueryResult execute = query.execute();
             NodeIterator nodes = execute.getNodes();
 
-            Assert.assertEquals(1, nodes.getSize());
-            Assert.assertEquals(NODE_NAME, nodes.nextNode().getName());
+            assertEquals(1, nodes.getSize());
+            assertEquals(NODE_NAME, nodes.nextNode().getName());
         }
     }
 
