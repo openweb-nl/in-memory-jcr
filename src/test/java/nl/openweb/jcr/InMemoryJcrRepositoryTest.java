@@ -23,13 +23,15 @@ import javax.jcr.query.QueryResult;
 import java.io.IOException;
 
 import org.hippoecm.repository.api.HippoNode;
-import org.junit.Assert;
-import org.junit.Test;
 
 import nl.openweb.jcr.utils.NodeTypeDefUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 import static javax.jcr.query.Query.XPATH;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Ebrahim Aharpour
@@ -63,8 +65,8 @@ public class InMemoryJcrRepositoryTest {
             QueryResult execute = query.execute();
             NodeIterator nodes = execute.getNodes();
 
-            Assert.assertEquals(1, nodes.getSize());
-            Assert.assertEquals(NODE_NAME, nodes.nextNode().getName());
+            assertEquals(1, nodes.getSize());
+            assertEquals(NODE_NAME, nodes.nextNode().getName());
         }
     }
 
@@ -75,7 +77,7 @@ public class InMemoryJcrRepositoryTest {
                     new SimpleCredentials("admin", "admin".toCharArray())
             );
             Node myNode = session.getRootNode().addNode("mynode");
-            Assert.assertTrue(myNode instanceof HippoNode);
+            assertTrue(myNode instanceof HippoNode);
             session.save();
         }
 
