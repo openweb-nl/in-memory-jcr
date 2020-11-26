@@ -46,6 +46,10 @@
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <slf4j.version>1.7.30</slf4j.version>
+    <hippo-repository.version>5.2.0</hippo-repository.version>
   </properties>
 
   <scm>
@@ -97,20 +101,20 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.12</version>
+      <version>${slf4j.version}</version>
     </dependency>
 
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.12</version>
+      <version>${slf4j.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${hippo-repository.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
